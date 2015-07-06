@@ -53,26 +53,53 @@ tree<K, V>::tree(){
 	root = NULL; //изначально дерево пусто -> корня нет
 }
 
+//template<typename K, typename V>
+//void tree<K, V>::insert(const K key, const V val){
+//	node<K, V>* nd = new node<K, V>(key, val); //создаем узел 
+//	node<K, V>* l = NULL, *r = NULL; //временные переменные
+//	l = root; //полагаем узел - корнем
+//	while (l != NULL){ //пока не дошли до листа
+//		r = l;
+//		if (key < l->key) //выбираем куда вставить
+//			l = l->left;
+//		else
+//			l = l->right;
+//	}
+//	nd->parent = r; //полагаем предком последний просмотренный узел
+//	if (r == NULL) //если такого нет - то дерево пусто, и вставляемый узел является корнем
+//		root = nd;
+//	else{
+//		if (key < r->key) //иначе выбираем предка
+//			r->left = nd;
+//		else
+//			r->right = nd;
+//	}
+//	return;
+//}
+
 template<typename K, typename V>
 void tree<K, V>::insert(const K key, const V val){
-	node<K, V>* nd = new node<K, V>(key, val); //создаем узел 
-	node<K, V>* l = NULL, *r = NULL; //временные переменные
-	l = root; //полагаем узел - корнем
-	while (l != NULL){ //пока не дошли до листа
-		r = l;
-		if (key < l->key) //выбираем куда вставить
-			l = l->left;
-		else
-			l = l->right;
-	}
-	nd->parent = r; //полагаем предком последний просмотренный узел
-	if (r == NULL) //если такого нет - то дерево пусто, и вставляемый узел является корнем
-		root = nd;
-	else{
-		if (key < r->key) //иначе выбираем предка
-			r->left = nd;
-		else
-			r->right = nd;
+	node<K, V>* nd = new node<K, V>(key, val); //создаем узел
+	node<K, V>* r = root;
+	while (r != NULL){
+		if (nd->key > r->key){
+			if (r->right != NULL)
+				r = r->right;
+			else{
+				nd->parent = r;
+				r->right = nd;
+				break;
+			}
+		}
+		else if (nd->key <= r->key){
+			if (r->left != NULL)
+				r = r->left;
+			else{
+				nd->parent = r;
+				r->left = nd;
+				break;
+			}
+		}
 	}
 	return;
 }
@@ -118,7 +145,7 @@ int main()
 	for (int i = 0; i < n; i++)
 		tr->insert(rand() % 1000, 0);
 	cout << clock() - z << endl;
-	//tr->walk(tr->get_root());
+	tr->walk(tr->get_root());
 	return 0;
 }
 
