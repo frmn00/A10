@@ -53,49 +53,29 @@ tree<K, V>::tree(){
 	root = NULL; //изначально дерево пусто -> корня нет
 }
 
-//template<typename K, typename V>
-//void tree<K, V>::insert(const K key, const V val){
-//	node<K, V>* nd = new node<K, V>(key, val); //создаем узел 
-//	node<K, V>* l = NULL, *r = NULL; //временные переменные
-//	l = root; //полагаем узел - корнем
-//	while (l != NULL){ //пока не дошли до листа
-//		r = l;
-//		if (key < l->key) //выбираем куда вставить
-//			l = l->left;
-//		else
-//			l = l->right;
-//	}
-//	nd->parent = r; //полагаем предком последний просмотренный узел
-//	if (r == NULL) //если такого нет - то дерево пусто, и вставляемый узел является корнем
-//		root = nd;
-//	else{
-//		if (key < r->key) //иначе выбираем предка
-//			r->left = nd;
-//		else
-//			r->right = nd;
-//	}
-//	return;
-//}
-
 template<typename K, typename V>
 void tree<K, V>::insert(const K key, const V val){
 	node<K, V>* nd = new node<K, V>(key, val); //создаем узел
+	if (root == NULL){ //если дерево пусто - то создаем корень
+		root = nd;
+		return;
+	}
 	node<K, V>* r = root;
-	while (r != NULL){
-		if (nd->key > r->key){
-			if (r->right != NULL)
-				r = r->right;
+	while (r != NULL){ //пока не наткнулись на лист
+		if (nd->key > r->key){ // если ключ больше текущего
+			if (r->right != NULL) //если не лист - продолжаем
+				r = r->right; // идём вправо
 			else{
-				nd->parent = r;
+				nd->parent = r; // если лист - вставляем
 				r->right = nd;
 				break;
 			}
 		}
-		else if (nd->key <= r->key){
-			if (r->left != NULL)
-				r = r->left;
+		else if (nd->key <= r->key){ //если ключ меньше
+			if (r->left != NULL) // если лист
+				r = r->left; // идём влево
 			else{
-				nd->parent = r;
+				nd->parent = r; //иначе вставляем
 				r->left = nd;
 				break;
 			}
@@ -137,15 +117,16 @@ void tree<K, V>::walk(const node<K, V>* n){
 
 int main()
 {
+	//freopen("out.txt", "w", stdout);
 	srand(time(NULL));
 	tree<int, int>* tr = new tree<int, int>();
-	int n;
+	int n, k = 0;
 	cin >> n;
-	int z = clock();
-	for (int i = 0; i < n; i++)
+	int z = clock(); //время после старта консоли
+	for (int i = 0; i < n; i++){
 		tr->insert(rand() % 1000, 0);
-	cout << clock() - z << endl;
-	tr->walk(tr->get_root());
+	}
+	cout << clock() - z << endl; //время вставки n элементов
 	return 0;
 }
 
