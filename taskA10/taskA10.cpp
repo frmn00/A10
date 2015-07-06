@@ -117,7 +117,7 @@ int main()
 	int z = clock();
 	for (int i = 0; i < n; i++)
 		tr->insert(rand() % 1000, 0);
-	cout << "Time: " << clock() - z << endl;
+	cout << clock() - z << endl;
 	//tr->walk(tr->get_root());
 	return 0;
 }
